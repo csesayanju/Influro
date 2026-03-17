@@ -10,6 +10,6 @@ We keep tickets in **Linear** (Tech team, cycles, labels) and do the work in **G
 
 That way the right commit is “tagged” to the ticket and you can review specific commits on the Linear issue.
 
-- **Full convention (branch, commit, PR, setup):** [COMMIT_CONVENTION.md](COMMIT_CONVENTION.md)
+- **Full convention (branch, commit, PR, setup):** [docs/COMMIT_CONVENTION.md](docs/COMMIT_CONVENTION.md)
 - **PR template:** [.github/pull_request_template.md](.github/pull_request_template.md)
 - **Branch protection (main):** [.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md) — one-time setup in GitHub Settings.
