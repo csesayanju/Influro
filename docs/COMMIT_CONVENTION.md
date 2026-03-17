@@ -63,7 +63,7 @@ Example with non-closing: `Ref TECH-3` or `Part of TECH-3`.
 ## Pull request title and description
 
 - **Title:** Include the issue ID when possible, e.g. `[TECH-3] Add PR template and commit convention`.
-- **Description:** Use the [PR template](.github/pull_request_template.md) and in the **Linear issue** section add exactly one of:
+- **Description:** Use the [PR template](../.github/pull_request_template.md) and in the **Linear issue** section add exactly one of:
   - `Fixes TECH-XXX` (this PR completes the issue → auto-close on merge).
   - `Ref TECH-XXX` or `Part of TECH-XXX` (link only, no auto-close).
 
