@@ -1,6 +1,7 @@
 -- Influro DB schema (Supabase/Postgres)
 -- TECH-2: Do not apply yet — review first.
 -- Tables: brands, campaigns, influencers, utm_links, click_events, conversions, fraud_scores
+-- Visual: SCHEMA_DIAGRAM.md and schema-diagram.html (same Mermaid ER diagram)
 
 -- Enable UUID extension if not already
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
