@@ -12,3 +12,4 @@ That way the right commit is “tagged” to the ticket and you can review speci
 
 - **Full convention (branch, commit, PR, setup):** [COMMIT_CONVENTION.md](COMMIT_CONVENTION.md)
 - **PR template:** [.github/pull_request_template.md](.github/pull_request_template.md)
+- **Branch protection (main):** [.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md) — one-time setup in GitHub Settings.
