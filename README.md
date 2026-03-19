@@ -1,5 +1,9 @@
 # Influro
 
+Next.js 14 (App Router) + TypeScript + Tailwind + Supabase. App code is under **`src/`**.
+
+- **Repo layout (folders, conventions):** [docs/REPO_STRUCTURE.md](docs/REPO_STRUCTURE.md)
+
 ## Working with Linear and GitHub
 
 We keep tickets in **Linear** (Tech team, cycles, labels) and do the work in **GitHub**. To keep them in sync and to review by commit:

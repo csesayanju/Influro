@@ -1,6 +1,7 @@
-import { SignOutButton } from "@/components/SignOutButton";
+import { SignOutButton } from "@/components/auth/sign-out-button";
+import { routes } from "@/config/routes";
+import { ensureBrandProfile } from "@/lib/actions/brands";
 import { createClient } from "@/lib/supabase/server";
-import { ensureBrandProfile } from "./actions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -11,14 +12,16 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(routes.login);
   }
 
   const ensured = await ensureBrandProfile();
   if ("error" in ensured) {
     return (
       <main className="min-h-screen p-8">
-        <p className="text-red-600">Could not set up brand profile: {ensured.error}</p>
+        <p className="text-red-600">
+          Could not set up brand profile: {ensured.error}
+        </p>
         <SignOutButton />
       </main>
     );
@@ -35,11 +38,13 @@ export default async function DashboardPage() {
       <div className="mx-auto max-w-lg rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
         <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
         <p className="mt-2 text-gray-600">
-          Signed in as <span className="font-medium text-gray-900">{user.email}</span>
+          Signed in as{" "}
+          <span className="font-medium text-gray-900">{user.email}</span>
         </p>
         {brand ? (
           <p className="mt-4 text-sm text-gray-600">
-            Brand: <span className="font-medium text-gray-900">{brand.name}</span>
+            Brand:{" "}
+            <span className="font-medium text-gray-900">{brand.name}</span>
             {brand.plan ? (
               <span className="text-gray-500"> · Plan: {brand.plan}</span>
             ) : null}
@@ -48,7 +53,7 @@ export default async function DashboardPage() {
         <div className="mt-8 flex gap-3">
           <SignOutButton />
           <Link
-            href="/"
+            href={routes.home}
             className="inline-flex items-center rounded-lg border border-transparent px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-500"
           >
             Home
