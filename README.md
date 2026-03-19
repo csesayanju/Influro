@@ -14,3 +14,6 @@ That way the right commit is “tagged” to the ticket and you can review speci
 - **PR template:** [.github/pull_request_template.md](.github/pull_request_template.md)
 - **Branch protection (main):** [.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md) — one-time setup in GitHub Settings.
 - **Vercel (preview + production):** [docs/VERCEL_SETUP.md](docs/VERCEL_SETUP.md)
+- **Supabase (env + apply schema):** [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md)
+- **Auth (email/password; Google deferred):** [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md) · [Linear auth ticket split](docs/LINEAR_AUTH_TICKETS.md)
+- **Vercel Preview + Supabase redirects:** [docs/VERCEL_PREVIEW.md](docs/VERCEL_PREVIEW.md)

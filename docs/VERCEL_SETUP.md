@@ -2,7 +2,7 @@
 
 ## Connect the repo
 
-1. In [Vercel](https://vercel.com), **Add NewÖ ? Project** and import **`csesayanju/Influro`**.
+1. In [Vercel](https://vercel.com), **Add New ? Project** and import **`csesayanju/Influro`**.
 2. **Framework preset:** Next.js (auto-detected).
 3. **Root directory:** repository root (default).
 4. **Production branch:** `main` (Vercel ? Project ? Settings ? Git).
@@ -14,16 +14,22 @@
 
 No extra `vercel.json` is required for this; the file in the repo documents intent and keeps GitHub integration explicit.
 
-## Environment variables (when you use Supabase in the app)
+## Environment variables (required for auth + middleware)
 
-When routes or server code call Supabase, add in **Vercel ? Project ? Settings ? Environment Variables** (mirror `.env.local.example`):
+**Middleware** runs on every matched request. It needs Supabase URL + anon/publishable key. If they are missing, the app skips session refresh (no crash); for real auth on **Preview** and **Production**, set:
+
+**Vercel ? Project ? Settings ? Environment Variables** (mirror `.env.local`):
 
 | Name | Environments |
 |------|----------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Production, Preview, Development |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Production, Preview, Development |
+| `NEXT_PUBLIC_SUPABASE_URL` | **Production**, **Preview**, Development |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | **Production**, **Preview**, Development |
+
+**Important:** Enable both for **Preview** ù PR deployments use Preview env; without these you get no session and odd auth behavior. After `MIDDLEWARE_INVOCATION_FAILED`, ensure you are not mutating read-only request cookies (fixed in repo middleware) **and** that these variables exist for Preview.
 
 Redeploy after adding or changing variables.
+
+**PR Preview still broken?** See **[VERCEL_PREVIEW.md](./VERCEL_PREVIEW.md)** (Supabase wildcard `https://*-.vercel.app/**` + Preview env vars).
 
 ## Useful links
 

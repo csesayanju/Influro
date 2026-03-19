@@ -1,7 +1,7 @@
 -- =============================================================================
 -- Influro — Database schema (Supabase/Postgres)
 -- Micro-Influencer ROI Tracker for Indian D2C brands.
--- Apply to Supabase: see docs/SUPABASE_SETUP.md. Visual: SCHEMA_DIAGRAM.md, schema-diagram.html
+-- Applied via Supabase SQL Editor or `supabase db push`. Diagrams: db/SCHEMA_DIAGRAM.md
 -- =============================================================================
 --
 -- Tables and row-level security (RLS) owner:
