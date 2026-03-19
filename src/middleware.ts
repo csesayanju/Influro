@@ -1,24 +1,22 @@
+import { authPaths, routes } from "@/config/routes";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // Avoid throwing on Vercel Preview/Prod if env vars are missing (set in Project Settings).
-  if (!url || !anonKey) {
+  if (!supabaseUrl || !anonKey) {
     return NextResponse.next({ request });
   }
 
   let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient(url, anonKey, {
+  const supabase = createServerClient(supabaseUrl, anonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
       },
-      // Do not call request.cookies.set — it throws on Edge (Vercel): cookies are read-only on the request.
-      // Only mutate the response (Supabase SSR pattern for Next 14+ on Edge).
       setAll(cookiesToSet) {
         supabaseResponse = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) =>
@@ -34,12 +32,12 @@ export async function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
 
-  if (user && (path === "/login" || path === "/signup")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (user && authPaths.includes(path)) {
+    return NextResponse.redirect(new URL(routes.dashboard, request.url));
   }
 
-  if (!user && path.startsWith("/dashboard")) {
-    const login = new URL("/login", request.url);
+  if (!user && path.startsWith(routes.dashboard)) {
+    const login = new URL(routes.login, request.url);
     login.searchParams.set("next", path);
     return NextResponse.redirect(login);
   }

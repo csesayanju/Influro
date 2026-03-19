@@ -1,9 +1,12 @@
 "use server";
 
+import { routes } from "@/config/routes";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function ensureBrandProfile(): Promise<{ ok: true } | { error: string }> {
+export type EnsureBrandResult = { ok: true } | { error: string };
+
+export async function ensureBrandProfile(): Promise<EnsureBrandResult> {
   const supabase = createClient();
   const {
     data: { user },
@@ -37,6 +40,6 @@ export async function ensureBrandProfile(): Promise<{ ok: true } | { error: stri
     return { error: error.message };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath(routes.dashboard);
   return { ok: true };
 }
