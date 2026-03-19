@@ -32,15 +32,17 @@ Supabase only redirects to URLs you allow. Email confirmation links (if enabled)
 
 **Site URL:** your app origin only (no path), e.g. `http://localhost:3000` for dev or `https://influro.vercel.app` for prod.
 
-**Redirect URLs** — add each you need:
+**Redirect URLs** — add each you need. For **Vercel PR previews**, you **must** allow preview hostnames (see [VERCEL_PREVIEW.md](./VERCEL_PREVIEW.md)):
 
-| Environment | URL |
-|-------------|-----|
-| Local | `http://localhost:3000/auth/callback` |
-| Local (alt) | `http://127.0.0.1:3000/auth/callback` |
-| Production | `https://YOUR-DOMAIN/auth/callback` |
+| Environment | URL / pattern |
+|-------------|----------------|
+| Local | `http://localhost:3000/**` (or exact `/auth/callback` paths) |
+| **Vercel Preview (all PRs)** | **`https://*-.vercel.app/**`** |
+| Production | `https://YOUR-DOMAIN/**` (e.g. `https://influro.vercel.app/**`) |
 
-Save. No trailing slash.
+Wildcards are [documented by Supabase](https://supabase.com/docs/guides/auth/redirect-urls#use-wildcards-in-redirect-urls). Without the Vercel wildcard, Preview auth redirects fail.
+
+Save after editing.
 
 ---
 
