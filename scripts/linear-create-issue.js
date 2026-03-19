@@ -25,9 +25,9 @@ async function main() {
   const description = process.argv[3] || `Restructure the repository into a clear folder layout so app code, config, scripts, and docs are organised and easy to navigate.
 
 **Suggested structure (adjust as needed):**
-- \`app/\` — Next.js App Router (already present)
-- \`lib/\` or \`src/lib/\` — shared utilities, Supabase client
-- \`components/\` — React components
+- \`src/app/\` — Next.js App Router
+- \`src/lib/\` — shared utilities, Supabase client
+- \`src/components/\` — React components
 - \`scripts/\` or \`tools/\` — Linear setup, move-issue, and other one-off scripts (move influro-linear-setup.js, linear-move-issue.js here)
 - \`docs/\` — COMMIT_CONVENTION.md, or keep at root
 - Keep \`.github/\`, config files (next.config, tsconfig, tailwind), and root README at root
