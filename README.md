@@ -15,3 +15,4 @@ That way the right commit is “tagged” to the ticket and you can review speci
 - **Branch protection (main):** [.github/BRANCH_PROTECTION.md](.github/BRANCH_PROTECTION.md) — one-time setup in GitHub Settings.
 - **Vercel (preview + production):** [docs/VERCEL_SETUP.md](docs/VERCEL_SETUP.md)
 - **Supabase (env + apply schema):** [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md)
+- **Auth (email, Google, redirects):** [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md)

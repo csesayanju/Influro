@@ -40,10 +40,14 @@ Requires the database password when linking (not the API keys).
 - **Table Editor:** tables `brands`, `campaigns`, `influencers`, `utm_links`, `click_events`, `conversions`, `fraud_scores`.
 - **Authentication → Policies:** RLS enabled; `click_events` has **no** policies (service role only for writes).
 
-## 5. Deploy (Vercel)
+## 5. Auth (login, Google OAuth)
+
+After the DB schema is applied, configure **Authentication** and redirect URLs: [AUTH_SETUP.md](./AUTH_SETUP.md).
+
+## 6. Deploy (Vercel)
 
 Add the same `NEXT_PUBLIC_*` variables (and `SUPABASE_SECRET_KEY` only if a serverless route needs bypass-RLS access) in **Vercel → Project → Environment Variables**.
 
-## 6. Security
+## 7. Security
 
 If API keys were ever pasted in chat or committed by mistake, **rotate** them in **Settings → API Keys** and update `.env.local` / Vercel.
