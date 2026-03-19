@@ -43,23 +43,6 @@ export default function SignupPage() {
     }
   }
 
-  async function onGoogle() {
-    setLoading(true);
-    setMessage(null);
-    const supabase = createClient();
-    const origin = window.location.origin;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${origin}/auth/callback?next=/dashboard`,
-      },
-    });
-    setLoading(false);
-    if (error) {
-      setMessage(error.message);
-    }
-  }
-
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <div className="mx-auto w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -113,24 +96,6 @@ export default function SignupPage() {
             {loading ? "…" : "Create account"}
           </button>
         </form>
-
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-gray-500">Or</span>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          disabled={loading}
-          onClick={() => void onGoogle()}
-          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50"
-        >
-          Continue with Google
-        </button>
 
         <p className="mt-6 text-center text-sm text-gray-500">
           <Link href="/" className="hover:text-gray-700">

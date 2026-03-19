@@ -1,51 +1,89 @@
-# Auth setup (TECH-6)
+# Auth setup (TECH-6) — email + password only
 
-Influro uses **Supabase Auth** with **email + password** and **Google** OAuth. Sessions use HTTP-only cookies via [`@supabase/ssr`](https://supabase.com/docs/guides/auth/server-side/nextjs).
+Influro uses **Supabase Auth** with **email and password**. Sessions use HTTP-only cookies via [@supabase/ssr](https://supabase.com/docs/guides/auth/server-side/nextjs).
+
+**Google OAuth is deferred** — see [GOOGLE_AUTH_DEFERRED.md](./GOOGLE_AUTH_DEFERRED.md) and the Linear ticket created for that work (no Google Cloud needed for TECH-6).
+
+---
+
+## Quick checklist
+
+1. **[Supabase URL configuration](#1-supabase--url-configuration)** — allow `/auth/callback` on your app domain(s).
+2. **[`.env.local` + run app](#2-envlocal--run-locally)** — public Supabase URL + anon/publishable key.
+
+---
 
 ## Environment
 
-Same as [SUPABASE_SETUP.md](./SUPABASE_SETUP.md): `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`.
+Same as [SUPABASE_SETUP.md](./SUPABASE_SETUP.md):
 
-## Supabase Dashboard
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable `sb_publishable_...` or legacy anon JWT)
 
-### Site URL & redirects
+`SUPABASE_SECRET_KEY` is optional for auth pages (used for server-only bypass-RLS code later).
 
-1. **Authentication → URL configuration**
-   - **Site URL:** `http://localhost:3000` (dev) and your production URL (e.g. `https://influro.vercel.app`) for prod — you can switch or add both patterns per environment.
-   - **Redirect URLs** (add each):
-     - `http://localhost:3000/auth/callback`
-     - `http://127.0.0.1:3000/auth/callback`
-     - `https://YOUR-PRODUCTION-DOMAIN/auth/callback`
+---
 
-### Email auth
+## 1. Supabase — URL configuration
 
-- **Authentication → Providers → Email** — enabled by default.
-- If **“Confirm email”** is on, users must click the link before signing in; the link should use a redirect URL listed above.
+Supabase only redirects to URLs you allow. Email confirmation links (if enabled) and any future OAuth use your app’s **`/auth/callback`**.
 
-### Google OAuth
+**Where:** Dashboard → **Authentication** → **URL configuration**.
 
-1. **Authentication → Providers → Google** — enable.
-2. Create OAuth credentials in [Google Cloud Console](https://console.cloud.google.com/apis/credentials) (OAuth 2.0 Client ID, type **Web application**).
-3. **Authorized redirect URIs** must include Supabase’s callback, e.g.  
-   `https://<project-ref>.supabase.co/auth/v1/callback`  
-   (copy exact URL from the Google provider settings in Supabase).
-4. Paste **Client ID** and **Client secret** into Supabase and save.
+**Site URL:** your app origin only (no path), e.g. `http://localhost:3000` for dev or `https://influro.vercel.app` for prod.
+
+**Redirect URLs** — add each you need:
+
+| Environment | URL |
+|-------------|-----|
+| Local | `http://localhost:3000/auth/callback` |
+| Local (alt) | `http://127.0.0.1:3000/auth/callback` |
+| Production | `https://YOUR-DOMAIN/auth/callback` |
+
+Save. No trailing slash.
+
+---
+
+## 2. `.env.local` + run locally
+
+1. Copy `.env.local.example` → `.env.local` (repo root, never commit).
+2. Paste **Project URL** and **publishable** (or anon) key from Supabase → **Project Settings** → **API** / **API Keys**.
+3. Run:
+
+```bash
+npm install
+npm run dev
+```
+
+4. Open **http://localhost:3000/signup** or **/login**, create an account, confirm email if your project requires it, then open **/dashboard**.
+
+---
 
 ## App routes
 
 | Path | Purpose |
 |------|--------|
-| `/login` | Email/password + Google |
-| `/signup` | Register + Google |
-| `/auth/callback` | OAuth / magic-link code exchange |
+| `/login` | Email + password |
+| `/signup` | Register |
+| `/auth/callback` | Email confirmation / magic link / **future** OAuth code exchange |
 | `/dashboard` | Protected; creates `brands` row on first visit if missing |
+
+---
 
 ## Brand row (RLS)
 
-After login, `/dashboard` runs `ensureBrandProfile()` which inserts into `public.brands` with `user_id = auth.uid()` when no row exists. Your RLS policies allow this for the signed-in user.
+`/dashboard` runs `ensureBrandProfile()` — inserts `public.brands` for `auth.uid()` when none exists (name from email or `"My brand"`).
+
+---
 
 ## Troubleshooting
 
-- **OAuth redirect mismatch** — add the exact callback URLs in Supabase and Google console.
-- **`Invalid API key`** — confirm `.env.local` matches the project’s **publishable** (or anon) key.
-- **Stuck on login** — check middleware and that cookies are not blocked; try another browser profile.
+- **Redirect / link errors** — ensure `/auth/callback` URLs are in **Redirect URLs** and **Site URL** matches how you open the app.
+- **Invalid API key** — `.env.local` must match this Supabase project.
+
+---
+
+## Linear / scope note
+
+- **TECH-6 (edit in Linear):** *Auth: Supabase email/password, SSR cookies, `/dashboard`, brand bootstrap — **no Google**.*
+- **New backlog issue:** *Auth: Add Google OAuth (deferred)* — details in [docs/LINEAR_AUTH_TICKETS.md](./LINEAR_AUTH_TICKETS.md).

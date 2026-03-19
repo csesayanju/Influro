@@ -14,7 +14,7 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(
-    authError ? "Sign-in failed. Try again or use another method." : null
+    authError ? "Sign-in failed. Check your email and password." : null
   );
   const [loading, setLoading] = useState(false);
 
@@ -31,23 +31,6 @@ function LoginForm() {
     }
     router.push(next);
     router.refresh();
-  }
-
-  async function onGoogle() {
-    setLoading(true);
-    setMessage(null);
-    const supabase = createClient();
-    const origin = window.location.origin;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
-      },
-    });
-    setLoading(false);
-    if (error) {
-      setMessage(error.message);
-    }
   }
 
   return (
@@ -101,24 +84,6 @@ function LoginForm() {
           {loading ? "…" : "Log in"}
         </button>
       </form>
-
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-200" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-gray-500">Or</span>
-        </div>
-      </div>
-
-      <button
-        type="button"
-        disabled={loading}
-        onClick={() => void onGoogle()}
-        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50"
-      >
-        Continue with Google
-      </button>
 
       <p className="mt-6 text-center text-sm text-gray-500">
         <Link href="/" className="hover:text-gray-700">

@@ -40,9 +40,9 @@ Requires the database password when linking (not the API keys).
 - **Table Editor:** tables `brands`, `campaigns`, `influencers`, `utm_links`, `click_events`, `conversions`, `fraud_scores`.
 - **Authentication → Policies:** RLS enabled; `click_events` has **no** policies (service role only for writes).
 
-## 5. Auth (login, Google OAuth)
+## 5. Auth (email/password)
 
-After the DB schema is applied, configure **Authentication** and redirect URLs: [AUTH_SETUP.md](./AUTH_SETUP.md).
+After the DB schema is applied, configure **Authentication** → **URL configuration** and env vars: [AUTH_SETUP.md](./AUTH_SETUP.md). Google OAuth is a separate backlog ticket — [LINEAR_AUTH_TICKETS.md](./LINEAR_AUTH_TICKETS.md).
 
 ## 6. Deploy (Vercel)
 
