@@ -6,6 +6,7 @@ export const routes = {
   login: "/login",
   signup: "/signup",
   dashboard: "/dashboard",
+  onboarding: "/onboarding",
   authCallback: "/auth/callback",
 } as const;
 

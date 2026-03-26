@@ -76,6 +76,8 @@ npm run dev
 
 `/dashboard` runs `ensureBrandProfile()` — inserts `public.brands` for `auth.uid()` when none exists (name from email or `"My brand"`).
 
+If the brand row has **no `category` yet**, the app redirects to **`/onboarding`** (TECH-7). See [ONBOARDING.md](./ONBOARDING.md).
+
 ---
 
 ## Troubleshooting

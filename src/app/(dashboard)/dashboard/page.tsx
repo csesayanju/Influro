@@ -29,9 +29,13 @@ export default async function DashboardPage() {
 
   const { data: brand } = await supabase
     .from("brands")
-    .select("name, plan")
+    .select("name, plan, category")
     .eq("user_id", user.id)
     .maybeSingle();
+
+  if (brand && !brand.category) {
+    redirect(routes.onboarding);
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
