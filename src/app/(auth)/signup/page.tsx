@@ -11,39 +11,65 @@ import { useState } from "react";
 
 export default function SignupPage() {
   const router = useRouter();
+  const [brandName, setBrandName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  function normalizeSignupError(raw: string) {
+    const lower = raw.toLowerCase();
+    if (lower.includes("email rate limit exceeded")) {
+      return "Too many signup emails were requested. Please wait a few minutes, then try again, or log in if the account already exists.";
+    }
+    if (lower.includes("failed to fetch") || lower.includes("network")) {
+      return "Could not reach Supabase. Check your internet and NEXT_PUBLIC_SUPABASE_* env values, then retry.";
+    }
+    return raw;
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-    const supabase = createClient();
-    const origin = window.location.origin;
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}${routes.authCallback}`,
-      },
-    });
-    setLoading(false);
-    if (error) {
-      setMessage(error.message);
-      return;
-    }
-    if (data.user?.identities?.length === 0) {
-      setMessage("This email is already registered. Try logging in.");
-      return;
-    }
-    setMessage(
-      "Check your email for a confirmation link (if required), or you may already be signed in."
-    );
-    router.refresh();
-    if (data.session) {
-      router.push(routes.dashboard);
+    try {
+      const supabase = createClient();
+      const origin = window.location.origin;
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${origin}${routes.authCallback}`,
+          data: {
+            full_name: brandName.trim() || undefined,
+          },
+        },
+      });
+      if (error) {
+        setMessage(normalizeSignupError(error.message));
+        setLoading(false);
+        return;
+      }
+      if (data.user?.identities?.length === 0) {
+        setMessage("This email is already registered. Try logging in.");
+        setLoading(false);
+        return;
+      }
+      setMessage(
+        "Check your email for a confirmation link (if required), or you may already be signed in."
+      );
+      router.refresh();
+      if (data.session) {
+        router.push(routes.dashboard);
+      }
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? normalizeSignupError(error.message)
+          : "Could not sign up. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -67,6 +93,14 @@ export default function SignupPage() {
       ) : null}
 
       <form onSubmit={(e) => void onSubmit(e)} className="mt-6 space-y-4">
+        <Field
+          label="Brand name (optional)"
+          id="brandName"
+          type="text"
+          value={brandName}
+          onChange={(e) => setBrandName(e.target.value)}
+          placeholder="e.g. Mamaearth"
+        />
         <Field
           label="Email"
           id="email"

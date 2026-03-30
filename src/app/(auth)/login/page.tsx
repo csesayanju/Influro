@@ -22,18 +22,40 @@ function LoginForm() {
   );
   const [loading, setLoading] = useState(false);
 
+  function normalizeLoginError(raw: string) {
+    const lower = raw.toLowerCase();
+    if (lower.includes("failed to fetch") || lower.includes("network")) {
+      return "Could not reach Supabase. Check your internet and NEXT_PUBLIC_SUPABASE_* env values, then retry.";
+    }
+    if (lower.includes("invalid api key") || lower.includes("apikey")) {
+      return "Supabase key looks invalid. Verify NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.";
+    }
+    return raw;
+  }
+
   async function onEmailLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    let errorMessage: string | null = null;
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        errorMessage = normalizeLoginError(error.message);
+      }
+    } catch (error) {
+      errorMessage =
+        error instanceof Error
+          ? normalizeLoginError(error.message)
+          : "Could not sign in. Please try again.";
+    }
     setLoading(false);
-    if (error) {
-      setMessage(error.message);
+    if (errorMessage) {
+      setMessage(errorMessage);
       return;
     }
     router.push(next);
@@ -78,6 +100,14 @@ function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <p className="-mt-1 text-right text-xs text-gray-500">
+          <Link
+            href={routes.forgotPassword}
+            className="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            Forgot password?
+          </Link>
+        </p>
         <Button type="submit" disabled={loading} className="w-full">
           {loading ? "..." : "Log in"}
         </Button>

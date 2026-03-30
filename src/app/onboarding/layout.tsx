@@ -27,9 +27,5 @@ export default async function OnboardingLayout({
     redirect(routes.dashboard);
   }
 
-  if (brand.category) {
-    redirect(routes.dashboard);
-  }
-
   return <>{children}</>;
 }

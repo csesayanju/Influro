@@ -26,6 +26,11 @@ export default function OnboardingPage() {
   const [goals, setGoals] = useState<string[]>([]);
   const [platforms, setPlatforms] = useState<string[]>([]);
 
+  function toStringArray(value: unknown): string[] {
+    if (!Array.isArray(value)) return [];
+    return value.filter((item): item is string => typeof item === "string");
+  }
+
   useEffect(() => {
     let cancelled = false;
     async function loadBrand() {
@@ -36,12 +41,22 @@ export default function OnboardingPage() {
       if (!user || cancelled) return;
       const { data: brand } = await supabase
         .from("brands")
-        .select("name, website")
+        .select("name, website, category, goals, platforms, monthly_budget")
         .eq("user_id", user.id)
         .maybeSingle();
       if (cancelled || !brand) return;
       setName((n) => (n ? n : brand.name ?? ""));
       setWebsite((w) => (w ? w : brand.website ?? ""));
+      setCategory((c) => (c ? c : brand.category ?? ""));
+      setGoals((g) => (g.length > 0 ? g : toStringArray(brand.goals)));
+      setPlatforms((p) => (p.length > 0 ? p : toStringArray(brand.platforms)));
+      setMonthlyBudget((b) =>
+        b
+          ? b
+          : typeof brand.monthly_budget === "number"
+            ? String(brand.monthly_budget)
+            : ""
+      );
     }
     void loadBrand();
     return () => {
@@ -60,8 +75,7 @@ export default function OnboardingPage() {
     setter([...list, value]);
   }
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmit() {
     setLoading(true);
     setError(null);
     const supabase = createClient();
@@ -160,7 +174,7 @@ export default function OnboardingPage() {
           <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
         ) : null}
 
-        <form className="mt-6 space-y-6" onSubmit={(e) => void onSubmit(e)}>
+        <div className="mt-6 space-y-6">
           {step === 1 ? (
             <section className="space-y-4">
               <Field label="Brand name" id="name" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -236,6 +250,11 @@ export default function OnboardingPage() {
                 placeholder="e.g. 50000"
                 value={monthlyBudget}
                 onChange={(e) => setMonthlyBudget(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                  }
+                }}
               />
 
               <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
@@ -243,6 +262,22 @@ export default function OnboardingPage() {
                 <p><span className="font-medium">Category:</span> {category}</p>
                 <p><span className="font-medium">Goals:</span> {goals.join(", ") || "\u2014"}</p>
                 <p><span className="font-medium">Platforms:</span> {platforms.join(", ") || "\u2014"}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Edit brand details
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Edit goals/platforms
+                  </button>
+                </div>
               </div>
             </section>
           ) : null}
@@ -267,11 +302,17 @@ export default function OnboardingPage() {
                   Continue
                 </Button>
               ) : (
-                <Button type="submit" disabled={loading}>{loading ? "Saving..." : "Finish onboarding"}</Button>
+                <Button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => void onSubmit()}
+                >
+                  {loading ? "Saving..." : "Finish onboarding"}
+                </Button>
               )}
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </main>
   );

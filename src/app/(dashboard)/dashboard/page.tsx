@@ -1,3 +1,4 @@
+import { DeleteAccountButton } from "@/components/auth/delete-account-button";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { routes } from "@/config/routes";
 import { ensureBrandProfile } from "@/lib/actions/brands";
@@ -57,11 +58,24 @@ export default async function DashboardPage() {
         <div className="mt-8 flex gap-3">
           <SignOutButton />
           <Link
+            href={routes.onboarding}
+            className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Edit brand profile
+          </Link>
+          <Link
             href={routes.home}
             className="inline-flex items-center rounded-lg border border-transparent px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-500"
           >
             Home
           </Link>
+        </div>
+        <div className="mt-6 border-t border-gray-200 pt-6">
+          <p className="mb-2 text-sm font-medium text-gray-900">Danger zone</p>
+          <p className="mb-3 text-sm text-gray-600">
+            Deleting your account is permanent and removes related records.
+          </p>
+          <DeleteAccountButton />
         </div>
       </div>
     </main>
