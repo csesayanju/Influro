@@ -20,4 +20,5 @@ That way the right commit is “tagged” to the ticket and you can review speci
 - **Vercel (preview + production):** [docs/VERCEL_SETUP.md](docs/VERCEL_SETUP.md)
 - **Supabase (env + apply schema):** [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md)
 - **Auth (email/password; Google deferred):** [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md) · [Linear auth ticket split](docs/LINEAR_AUTH_TICKETS.md)
+- **Onboarding wizard (TECH-7):** [docs/ONBOARDING.md](docs/ONBOARDING.md)
 - **Vercel Preview + Supabase redirects:** [docs/VERCEL_PREVIEW.md](docs/VERCEL_PREVIEW.md)

@@ -1,13 +1,12 @@
 "use client";
 
 import { AuthCard } from "@/components/ui/auth-card";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { routes } from "@/config/routes";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import styles from "../auth-theme.module.css";
 
 function LoginForm() {
   const router = useRouter();
@@ -22,18 +21,40 @@ function LoginForm() {
   );
   const [loading, setLoading] = useState(false);
 
+  function normalizeLoginError(raw: string) {
+    const lower = raw.toLowerCase();
+    if (lower.includes("failed to fetch") || lower.includes("network")) {
+      return "Could not reach Supabase. Check your internet and NEXT_PUBLIC_SUPABASE_* env values, then retry.";
+    }
+    if (lower.includes("invalid api key") || lower.includes("apikey")) {
+      return "Supabase key looks invalid. Verify NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.";
+    }
+    return raw;
+  }
+
   async function onEmailLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    let errorMessage: string | null = null;
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        errorMessage = normalizeLoginError(error.message);
+      }
+    } catch (error) {
+      errorMessage =
+        error instanceof Error
+          ? normalizeLoginError(error.message)
+          : "Could not sign in. Please try again.";
+    }
     setLoading(false);
-    if (error) {
-      setMessage(error.message);
+    if (errorMessage) {
+      setMessage(errorMessage);
       return;
     }
     router.push(next);
@@ -42,49 +63,66 @@ function LoginForm() {
 
   return (
     <AuthCard>
-      <h1 className="text-2xl font-semibold text-gray-900">Log in</h1>
-      <p className="mt-1 text-sm text-gray-600">
+      <div className="text-center">
+        <div className={styles.logoPill}>
+          <span className={styles.logoDot} />
+          <span className={styles.logoText}>INFLURO</span>
+        </div>
+        <h1 className={styles.title}>Welcome back</h1>
+        <p className={styles.subtitle}>Sign in to your brand dashboard</p>
+      </div>
+      <p className={styles.footerText}>
         New here?{" "}
-        <Link
-          href={routes.signup}
-          className="font-medium text-indigo-600 hover:text-indigo-500"
-        >
+        <Link href={routes.signup} className={styles.link}>
           Create an account
         </Link>
       </p>
 
       {message ? (
-        <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
-          {message}
-        </p>
+        <p className={styles.messageError}>{message}</p>
       ) : null}
 
-      <form onSubmit={(e) => void onEmailLogin(e)} className="mt-6 space-y-4">
-        <Field
-          label="Email"
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Field
-          label="Password"
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button type="submit" disabled={loading} className="w-full">
+      <form onSubmit={(e) => void onEmailLogin(e)} className="mt-6">
+        <div className={styles.fieldGroup}>
+          <label htmlFor="email" className={styles.label}>
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.fieldGroup}>
+          <label htmlFor="password" className={styles.label}>
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <p className={styles.helperRight}>
+          <Link href={routes.forgotPassword} className={styles.link}>
+            Forgot password?
+          </Link>
+        </p>
+        <button type="submit" disabled={loading} className={styles.primaryButton}>
           {loading ? "..." : "Log in"}
-        </Button>
+        </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-500">
-        <Link href={routes.home} className="hover:text-gray-700">
+      <p className={styles.footerText}>
+        <Link href={routes.home} className={styles.link}>
           Back to home
         </Link>
       </p>

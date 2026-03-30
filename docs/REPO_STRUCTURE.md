@@ -10,6 +10,7 @@ Application code lives under **`src/`** (Next.js 14 App Router). Root keeps infr
 │   │   ├── (dashboard)/        # Route group: protected app shell
 │   │   ├── (marketing)/        # Route group: public landing
 │   │   ├── auth/callback/      # OAuth / email confirmation (not in a group)
+│   │   ├── onboarding/         # Brand wizard (TECH-7); see docs/ONBOARDING.md
 │   │   ├── layout.tsx
 │   │   └── globals.css
 │   ├── components/
@@ -43,4 +44,4 @@ Application code lives under **`src/`** (Next.js 14 App Router). Root keeps infr
 
 ## URLs (unchanged)
 
-Route groups do **not** change URLs: `/`, `/login`, `/signup`, `/dashboard`, `/auth/callback`.
+Route groups do **not** change URLs: `/`, `/login`, `/signup`, `/dashboard`, `/onboarding`, `/auth/callback`.

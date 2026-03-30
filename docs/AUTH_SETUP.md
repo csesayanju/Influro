@@ -67,6 +67,8 @@ npm run dev
 |------|--------|
 | `/login` | Email + password |
 | `/signup` | Register |
+| `/forgot-password` | Request reset email |
+| `/reset-password` | Set a new password from recovery link |
 | `/auth/callback` | Email confirmation / magic link / **future** OAuth code exchange |
 | `/dashboard` | Protected; creates `brands` row on first visit if missing |
 
@@ -76,12 +78,15 @@ npm run dev
 
 `/dashboard` runs `ensureBrandProfile()` — inserts `public.brands` for `auth.uid()` when none exists (name from email or `"My brand"`).
 
+If the brand row has **no `category` yet**, the app redirects to **`/onboarding`** (TECH-7). See [ONBOARDING.md](./ONBOARDING.md).
+
 ---
 
 ## Troubleshooting
 
 - **Redirect / link errors** — ensure `/auth/callback` URLs are in **Redirect URLs** and **Site URL** matches how you open the app.
 - **Invalid API key** — `.env.local` must match this Supabase project.
+- **No Supabase connection / failed to fetch** — verify `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`, restart `npm run dev`, and confirm your network can reach Supabase.
 
 ---
 

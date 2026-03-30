@@ -1,0 +1,279 @@
+.theme {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(34, 211, 238, 0.1), transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(99, 102, 241, 0.09), transparent 50%),
+    var(--influro-bg-alt);
+  font-family: var(--influro-font-family);
+  padding: 24px;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 800px;
+  border-radius: 24px;
+  border: 1px solid var(--influro-card-border);
+  background: var(--influro-card-bg);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 8px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: 24px;
+}
+
+.stepText {
+  margin: 0;
+  color: var(--influro-cyan);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.logoPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 6px 14px;
+  margin-bottom: 14px;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+}
+
+.logoDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--influro-cyan);
+  box-shadow: 0 0 8px var(--influro-cyan);
+}
+
+.logoText {
+  color: var(--influro-cyan);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.stepper {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 8px;
+}
+
+.stepItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.stepDot {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--influro-text-muted);
+}
+
+.stepDotActive {
+  background: transparent;
+  color: var(--influro-cyan);
+  border: 2px solid var(--influro-cyan);
+  box-shadow: 0 0 14px var(--influro-cyan-glow);
+}
+
+.stepDotDone {
+  background: linear-gradient(135deg, var(--influro-cyan), var(--influro-cyan-dim));
+  color: #040e18;
+}
+
+.stepLabel {
+  color: var(--influro-text-muted);
+  font-size: 11px;
+}
+
+.title {
+  margin: 16px 0 4px;
+  color: var(--influro-text);
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--influro-text-muted);
+  font-size: 13px;
+}
+
+.error {
+  margin-top: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.12);
+  color: #fecaca;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+.section {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.label {
+  display: block;
+  color: var(--influro-text-sub);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.input,
+.select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--influro-input-border);
+  background: var(--influro-input-bg);
+  color: var(--influro-text);
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.input::placeholder {
+  color: var(--influro-text-muted);
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--influro-cyan);
+  box-shadow: 0 0 0 3px var(--influro-cyan-glow);
+}
+
+.select option {
+  background: #0f172a;
+  color: var(--influro-text);
+}
+
+.chipGroupLabel {
+  color: var(--influro-text-sub);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.chipRow {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--influro-text-sub);
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chipSelected {
+  border-color: var(--influro-cyan);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--influro-cyan);
+  box-shadow: 0 0 10px var(--influro-cyan-glow);
+}
+
+.summary {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--influro-text-sub);
+  padding: 14px;
+  font-size: 13px;
+  display: grid;
+  gap: 6px;
+}
+
+.summary strong {
+  color: var(--influro-text);
+}
+
+.editRow {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.editButton {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--influro-text-sub);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, var(--influro-cyan), var(--influro-cyan-dim));
+  color: #040e18;
+  box-shadow: 0 0 24px var(--influro-cyan-glow);
+}
+
+.btnPrimary:hover {
+  filter: brightness(1.05);
+}
+
+.btnOutline {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--influro-text-sub);
+}
+
+.btnGhostSlot {
+  width: 96px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

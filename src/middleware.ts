@@ -2,6 +2,18 @@ import { authPaths, routes } from "@/config/routes";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+/** Preserve refreshed auth cookies when returning a redirect (not `NextResponse.next`). */
+function redirectPreservingSupabaseCookies(
+  url: URL,
+  supabaseResponse: NextResponse
+) {
+  const redirectResponse = NextResponse.redirect(url);
+  supabaseResponse.cookies.getAll().forEach(({ name, value }) => {
+    redirectResponse.cookies.set(name, value);
+  });
+  return redirectResponse;
+}
+
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -33,13 +45,29 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   if (user && authPaths.includes(path)) {
-    return NextResponse.redirect(new URL(routes.dashboard, request.url));
+    const { data: brandRow, error: brandError } = await supabase
+      .from("brands")
+      .select("category")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    const needsOnboarding =
+      !brandError &&
+      brandRow &&
+      (!brandRow.category || String(brandRow.category).trim() === "");
+    const destination = needsOnboarding ? routes.onboarding : routes.dashboard;
+    return redirectPreservingSupabaseCookies(
+      new URL(destination, request.url),
+      supabaseResponse
+    );
   }
 
-  if (!user && path.startsWith(routes.dashboard)) {
+  if (
+    !user &&
+    (path.startsWith(routes.dashboard) || path.startsWith(routes.onboarding))
+  ) {
     const login = new URL(routes.login, request.url);
     login.searchParams.set("next", path);
-    return NextResponse.redirect(login);
+    return redirectPreservingSupabaseCookies(login, supabaseResponse);
   }
 
   return supabaseResponse;
