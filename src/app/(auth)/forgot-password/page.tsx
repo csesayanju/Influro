@@ -1,12 +1,11 @@
 "use client";
 
 import { AuthCard } from "@/components/ui/auth-card";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { routes } from "@/config/routes";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useState } from "react";
+import styles from "../auth-theme.module.css";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -54,37 +53,42 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthCard>
-      <h1 className="text-2xl font-semibold text-gray-900">Reset password</h1>
-      <p className="mt-1 text-sm text-gray-600">
-        We&apos;ll send a secure reset link to your email.
-      </p>
-      <p className="mt-1 text-xs text-gray-500">
-        If you don&apos;t see it, check spam/promotions and wait a minute.
-      </p>
+      <div className="text-center">
+        <div className={styles.logoPill}>
+          <span className={styles.logoDot} />
+          <span className={styles.logoText}>INFLURO</span>
+        </div>
+        <h1 className={styles.title}>Reset password</h1>
+        <p className={styles.subtitle}>We&apos;ll send a secure reset link to your email.</p>
+        <p className={styles.hint}>If you don&apos;t see it, check spam/promotions and wait a minute.</p>
+      </div>
 
       {message ? (
-        <p className="mt-4 rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-900">
-          {message}
-        </p>
+        <p className={styles.messageInfo}>{message}</p>
       ) : null}
 
-      <form onSubmit={(e) => void onSubmit(e)} className="mt-6 space-y-4">
-        <Field
-          label="Email"
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Button type="submit" disabled={loading} className="w-full">
+      <form onSubmit={(e) => void onSubmit(e)} className="mt-6">
+        <div className={styles.fieldGroup}>
+          <label htmlFor="email" className={styles.label}>
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <button type="submit" disabled={loading} className={styles.primaryButton}>
           {loading ? "Sending..." : "Send reset link"}
-        </Button>
+        </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-500">
-        <Link href={routes.login} className="hover:text-gray-700">
+      <p className={styles.footerText}>
+        <Link href={routes.login} className={styles.link}>
           Back to login
         </Link>
       </p>

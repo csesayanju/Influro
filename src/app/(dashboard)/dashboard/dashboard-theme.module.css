@@ -1,0 +1,78 @@
+.page {
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(34, 211, 238, 0.1), transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(99, 102, 241, 0.1), transparent 50%),
+    var(--influro-bg-alt);
+  font-family: var(--influro-font-family);
+}
+
+.card {
+  margin: 0 auto;
+  max-width: 760px;
+  border-radius: 24px;
+  border: 1px solid var(--influro-card-border);
+  background: var(--influro-card-bg);
+  padding: 32px;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 8px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.title {
+  margin: 0;
+  color: var(--influro-text);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text {
+  margin-top: 10px;
+  color: var(--influro-text-muted);
+  font-size: 14px;
+}
+
+.textStrong {
+  color: var(--influro-text);
+  font-weight: 600;
+}
+
+.actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--influro-text-sub);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.danger {
+  margin-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 20px;
+}
+
+.dangerTitle {
+  margin: 0;
+  color: #fda4af;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dangerText {
+  margin-top: 6px;
+  color: var(--influro-text-muted);
+  font-size: 13px;
+}

@@ -1,13 +1,12 @@
 "use client";
 
 import { AuthCard } from "@/components/ui/auth-card";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { routes } from "@/config/routes";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import styles from "../auth-theme.module.css";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -112,51 +111,61 @@ function ResetPasswordForm() {
 
   return (
     <AuthCard>
-      <h1 className="text-2xl font-semibold text-gray-900">Set new password</h1>
-      <p className="mt-1 text-sm text-gray-600">
-        Enter your new password to finish account recovery.
-      </p>
+      <div className="text-center">
+        <div className={styles.logoPill}>
+          <span className={styles.logoDot} />
+          <span className={styles.logoText}>INFLURO</span>
+        </div>
+        <h1 className={styles.title}>Set new password</h1>
+        <p className={styles.subtitle}>Enter your new password to finish account recovery.</p>
+      </div>
 
       {message ? (
-        <p className="mt-4 rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-900">
-          {message}
-        </p>
+        <p className={styles.messageInfo}>{message}</p>
       ) : null}
 
-      <form onSubmit={(e) => void onSubmit(e)} className="mt-6 space-y-4">
-        <Field
-          label="New password"
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={6}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="At least 6 characters"
-          disabled={!ready || loading}
-        />
-
-        <Field
-          label="Confirm password"
-          id="confirmPassword"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={6}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Repeat new password"
-          disabled={!ready || loading}
-        />
-
-        <Button type="submit" disabled={!ready || loading} className="w-full">
+      <form onSubmit={(e) => void onSubmit(e)} className="mt-6">
+        <div className={styles.fieldGroup}>
+          <label htmlFor="password" className={styles.label}>
+            New password
+          </label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="At least 6 characters"
+            disabled={!ready || loading}
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.fieldGroup}>
+          <label htmlFor="confirmPassword" className={styles.label}>
+            Confirm password
+          </label>
+          <input
+            id="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={6}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Repeat new password"
+            disabled={!ready || loading}
+            className={styles.input}
+          />
+        </div>
+        <button type="submit" disabled={!ready || loading} className={styles.primaryButton}>
           {loading ? "Updating..." : "Update password"}
-        </Button>
+        </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-500">
-        <Link href={routes.login} className="hover:text-gray-700">
+      <p className={styles.footerText}>
+        <Link href={routes.login} className={styles.link}>
           Back to login
         </Link>
       </p>

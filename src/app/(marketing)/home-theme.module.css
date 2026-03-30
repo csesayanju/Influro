@@ -1,0 +1,95 @@
+.page {
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(34, 211, 238, 0.1), transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(99, 102, 241, 0.1), transparent 50%),
+    var(--influro-bg-alt);
+  font-family: var(--influro-font-family);
+}
+
+.card {
+  margin: 0 auto;
+  max-width: 760px;
+  border-radius: 24px;
+  border: 1px solid var(--influro-card-border);
+  background: var(--influro-card-bg);
+  padding: 36px 32px;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 8px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.logoPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 6px 14px;
+  margin-bottom: 18px;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+}
+
+.logoDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--influro-cyan);
+  box-shadow: 0 0 8px var(--influro-cyan);
+}
+
+.logoText {
+  color: var(--influro-cyan);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.title {
+  margin: 0;
+  color: var(--influro-text);
+  font-size: 36px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin-top: 10px;
+  color: var(--influro-text-muted);
+  font-size: 15px;
+  max-width: 560px;
+}
+
+.nav {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.linkPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #040e18;
+  background: linear-gradient(135deg, var(--influro-cyan), var(--influro-cyan-dim));
+  box-shadow: 0 0 24px var(--influro-cyan-glow);
+}
+
+.linkSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--influro-text-sub);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}

@@ -1,31 +1,32 @@
 import { routes } from "@/config/routes";
 import Link from "next/link";
+import styles from "./home-theme.module.css";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-2xl font-semibold text-gray-900">Influro</h1>
-      <p className="mt-2 text-gray-600">Influencer campaign tracking.</p>
-      <nav className="mt-6 flex gap-4 text-sm font-medium">
-        <Link
-          href={routes.login}
-          className="text-indigo-600 hover:text-indigo-500"
-        >
-          Log in
-        </Link>
-        <Link
-          href={routes.signup}
-          className="text-indigo-600 hover:text-indigo-500"
-        >
-          Sign up
-        </Link>
-        <Link
-          href={routes.dashboard}
-          className="text-gray-600 hover:text-gray-900"
-        >
-          Dashboard
-        </Link>
-      </nav>
+    <main className={styles.page}>
+      <div className={styles.card}>
+        <div className={styles.logoPill}>
+          <span className={styles.logoDot} />
+          <span className={styles.logoText}>INFLURO</span>
+        </div>
+        <h1 className={styles.title}>Track influencer ROI with confidence</h1>
+        <p className={styles.subtitle}>
+          Unified dashboard for campaign performance, attribution, and fraud-aware
+          decisions for modern D2C teams.
+        </p>
+        <nav className={styles.nav}>
+          <Link href={routes.login} className={styles.linkPrimary}>
+            Log in
+          </Link>
+          <Link href={routes.signup} className={styles.linkPrimary}>
+            Sign up
+          </Link>
+          <Link href={routes.dashboard} className={styles.linkSecondary}>
+            Dashboard
+          </Link>
+        </nav>
+      </div>
     </main>
   );
 }

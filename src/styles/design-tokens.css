@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  --influro-font-family: "Sora", "Segoe UI", Roboto, Arial, sans-serif;
+
+  --influro-cyan: #22d3ee;
+  --influro-cyan-dim: #0891b2;
+  --influro-cyan-glow: rgba(34, 211, 238, 0.18);
+
+  --influro-bg: #040e18;
+  --influro-bg-alt: #020b12;
+  --influro-card-bg: rgba(255, 255, 255, 0.04);
+  --influro-card-border: rgba(34, 211, 238, 0.15);
+
+  --influro-text: #f1f5f9;
+  --influro-text-muted: #64748b;
+  --influro-text-sub: #94a3b8;
+
+  --influro-input-bg: rgba(255, 255, 255, 0.05);
+  --influro-input-border: rgba(34, 211, 238, 0.2);
+}

@@ -1,11 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { routes } from "@/config/routes";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import styles from "./onboarding-theme.module.css";
 
 const CATEGORIES = ["Fashion", "Beauty", "Food", "Fitness", "Lifestyle", "Other"] as const;
 const GOALS = ["Brand Awareness", "Sales", "Traffic", "Community"] as const;
@@ -139,10 +138,14 @@ export default function OnboardingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
-      <div className="mx-auto max-w-2xl rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-        <p className="text-sm font-medium text-indigo-600">Step {step} of 3</p>
-        <ol className="mt-4 flex gap-2" aria-label="Onboarding steps">
+    <main className={styles.theme}>
+      <div className={styles.container}>
+        <p className={styles.stepText}>Step {step} of 3</p>
+        <div className={styles.logoPill}>
+          <span className={styles.logoDot} />
+          <span className={styles.logoText}>INFLURO</span>
+        </div>
+        <ol className={styles.stepper} aria-label="Onboarding steps">
           {(
             [
               { n: 1, label: "Brand" },
@@ -150,41 +153,60 @@ export default function OnboardingPage() {
               { n: 3, label: "Review" },
             ] as const
           ).map(({ n, label }) => (
-            <li key={n} className="flex flex-1 flex-col items-center gap-1">
+            <li key={n} className={styles.stepItem}>
               <span
-                className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold ${
-                  step === n
-                    ? "bg-indigo-600 text-white ring-2 ring-indigo-600 ring-offset-2"
-                    : step > n
-                      ? "bg-indigo-100 text-indigo-800"
-                      : "bg-gray-200 text-gray-600"
-                }`}
+                className={[
+                  styles.stepDot,
+                  step === n ? styles.stepDotActive : "",
+                  step > n ? styles.stepDotDone : "",
+                ].join(" ")}
                 aria-current={step === n ? "step" : undefined}
               >
                 {n}
               </span>
-              <span className="hidden text-xs text-gray-600 sm:block">{label}</span>
+              <span className={styles.stepLabel}>{label}</span>
             </li>
           ))}
         </ol>
-        <h1 className="mt-6 text-2xl font-semibold text-gray-900">Brand onboarding</h1>
-        <p className="mt-1 text-sm text-gray-600">Set up your brand details to start tracking ROI.</p>
+        <h1 className={styles.title}>Brand onboarding</h1>
+        <p className={styles.subtitle}>Set up your brand details to start tracking ROI.</p>
 
-        {error ? (
-          <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
-        ) : null}
+        {error ? <p className={styles.error}>{error}</p> : null}
 
-        <div className="mt-6 space-y-6">
+        <div>
           {step === 1 ? (
-            <section className="space-y-4">
-              <Field label="Brand name" id="name" required value={name} onChange={(e) => setName(e.target.value)} />
-              <Field label="Website (optional)" id="website" placeholder="https://..." value={website} onChange={(e) => setWebsite(e.target.value)} />
-
+            <section className={styles.section}>
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                <label htmlFor="name" className={styles.label}>
+                  Brand name
+                </label>
+                <input
+                  id="name"
+                  className={styles.input}
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="website" className={styles.label}>
+                  Website (optional)
+                </label>
+                <input
+                  id="website"
+                  className={styles.input}
+                  placeholder="https://..."
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="category" className={styles.label}>
+                  Category
+                </label>
                 <select
                   id="category"
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className={styles.select}
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                 >
@@ -198,10 +220,10 @@ export default function OnboardingPage() {
           ) : null}
 
           {step === 2 ? (
-            <section className="space-y-5">
+            <section className={styles.section}>
               <div>
-                <p className="text-sm font-medium text-gray-700">Primary goals</p>
-                <div className="mt-2 flex flex-wrap gap-2">
+                <p className={styles.chipGroupLabel}>Primary goals</p>
+                <div className={styles.chipRow}>
                   {GOALS.map((goal) => {
                     const active = goals.includes(goal);
                     return (
@@ -210,7 +232,7 @@ export default function OnboardingPage() {
                         type="button"
                         aria-pressed={active}
                         onClick={() => toggle(goals, goal, setGoals)}
-                        className={`rounded-full px-3 py-1.5 text-sm ${active ? "bg-indigo-600 text-white" : "border border-gray-300 text-gray-700"}`}
+                        className={[styles.chip, active ? styles.chipSelected : ""].join(" ")}
                       >
                         {goal}
                       </button>
@@ -220,8 +242,8 @@ export default function OnboardingPage() {
               </div>
 
               <div>
-                <p className="text-sm font-medium text-gray-700">Platforms</p>
-                <div className="mt-2 flex flex-wrap gap-2">
+                <p className={styles.chipGroupLabel}>Platforms</p>
+                <div className={styles.chipRow}>
                   {PLATFORMS.map((platform) => {
                     const active = platforms.includes(platform);
                     return (
@@ -230,7 +252,7 @@ export default function OnboardingPage() {
                         type="button"
                         aria-pressed={active}
                         onClick={() => toggle(platforms, platform, setPlatforms)}
-                        className={`rounded-full px-3 py-1.5 text-sm ${active ? "bg-indigo-600 text-white" : "border border-gray-300 text-gray-700"}`}
+                        className={[styles.chip, active ? styles.chipSelected : ""].join(" ")}
                       >
                         {platform}
                       </button>
@@ -242,10 +264,14 @@ export default function OnboardingPage() {
           ) : null}
 
           {step === 3 ? (
-            <section className="space-y-4">
-              <Field
-                label="Monthly budget in INR (optional)"
-                id="budget"
+            <section className={styles.section}>
+              <div>
+                <label htmlFor="budget" className={styles.label}>
+                  Monthly budget in INR (optional)
+                </label>
+                <input
+                  id="budget"
+                  className={styles.input}
                 inputMode="numeric"
                 placeholder="e.g. 50000"
                 value={monthlyBudget}
@@ -255,25 +281,34 @@ export default function OnboardingPage() {
                     e.preventDefault();
                   }
                 }}
-              />
+                />
+              </div>
 
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
-                <p><span className="font-medium">Brand:</span> {name}</p>
-                <p><span className="font-medium">Category:</span> {category}</p>
-                <p><span className="font-medium">Goals:</span> {goals.join(", ") || "\u2014"}</p>
-                <p><span className="font-medium">Platforms:</span> {platforms.join(", ") || "\u2014"}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
+              <div className={styles.summary}>
+                <p>
+                  <strong>Brand:</strong> {name}
+                </p>
+                <p>
+                  <strong>Category:</strong> {category}
+                </p>
+                <p>
+                  <strong>Goals:</strong> {goals.join(", ") || "\u2014"}
+                </p>
+                <p>
+                  <strong>Platforms:</strong> {platforms.join(", ") || "\u2014"}
+                </p>
+                <div className={styles.editRow}>
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                    className={styles.editButton}
                   >
                     Edit brand details
                   </button>
                   <button
                     type="button"
                     onClick={() => setStep(2)}
-                    className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                    className={styles.editButton}
                   >
                     Edit goals/platforms
                   </button>
@@ -282,33 +317,39 @@ export default function OnboardingPage() {
             </section>
           ) : null}
 
-          <div className="flex items-center justify-between pt-2">
+          <div className={styles.actions}>
             <div>
               {step > 1 ? (
-                <Button type="button" variant="outline" onClick={() => setStep((s) => s - 1)}>
+                <button
+                  type="button"
+                  className={[styles.btn, styles.btnOutline].join(" ")}
+                  onClick={() => setStep((s) => s - 1)}
+                >
                   Back
-                </Button>
+                </button>
               ) : (
-                <div className="w-24" aria-hidden />
+                <div className={styles.btnGhostSlot} aria-hidden />
               )}
             </div>
             <div>
               {step < 3 ? (
-                <Button
+                <button
                   type="button"
                   onClick={() => setStep((s) => s + 1)}
                   disabled={(step === 1 && !canNextStep1) || (step === 2 && !canNextStep2)}
+                  className={[styles.btn, styles.btnPrimary].join(" ")}
                 >
                   Continue
-                </Button>
+                </button>
               ) : (
-                <Button
+                <button
                   type="button"
                   disabled={loading}
                   onClick={() => void onSubmit()}
+                  className={[styles.btn, styles.btnPrimary].join(" ")}
                 >
                   {loading ? "Saving..." : "Finish onboarding"}
-                </Button>
+                </button>
               )}
             </div>
           </div>

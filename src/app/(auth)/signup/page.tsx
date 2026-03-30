@@ -1,13 +1,12 @@
 "use client";
 
 import { AuthCard } from "@/components/ui/auth-card";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { routes } from "@/config/routes";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import styles from "../auth-theme.module.css";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -75,58 +74,75 @@ export default function SignupPage() {
 
   return (
     <AuthCard>
-      <h1 className="text-2xl font-semibold text-gray-900">Sign up</h1>
-      <p className="mt-1 text-sm text-gray-600">
+      <div className="text-center">
+        <div className={styles.logoPill}>
+          <span className={styles.logoDot} />
+          <span className={styles.logoText}>INFLURO</span>
+        </div>
+        <h1 className={styles.title}>Start tracking ROI</h1>
+        <p className={styles.subtitle}>Create your account in 30 seconds</p>
+      </div>
+      <p className={styles.footerText}>
         Already have an account?{" "}
-        <Link
-          href={routes.login}
-          className="font-medium text-indigo-600 hover:text-indigo-500"
-        >
+        <Link href={routes.login} className={styles.link}>
           Log in
         </Link>
       </p>
 
       {message ? (
-        <p className="mt-4 rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-900">
-          {message}
-        </p>
+        <p className={styles.messageInfo}>{message}</p>
       ) : null}
 
-      <form onSubmit={(e) => void onSubmit(e)} className="mt-6 space-y-4">
-        <Field
-          label="Brand name (optional)"
-          id="brandName"
-          type="text"
-          value={brandName}
-          onChange={(e) => setBrandName(e.target.value)}
-          placeholder="e.g. Mamaearth"
-        />
-        <Field
-          label="Email"
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Field
-          label="Password"
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={6}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button type="submit" disabled={loading} className="w-full">
+      <form onSubmit={(e) => void onSubmit(e)} className="mt-6">
+        <div className={styles.fieldGroup}>
+          <label htmlFor="brandName" className={styles.label}>
+            Brand name (optional)
+          </label>
+          <input
+            id="brandName"
+            type="text"
+            value={brandName}
+            onChange={(e) => setBrandName(e.target.value)}
+            placeholder="e.g. Mamaearth"
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.fieldGroup}>
+          <label htmlFor="email" className={styles.label}>
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.fieldGroup}>
+          <label htmlFor="password" className={styles.label}>
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <button type="submit" disabled={loading} className={styles.primaryButton}>
           {loading ? "..." : "Create account"}
-        </Button>
+        </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-500">
-        <Link href={routes.home} className="hover:text-gray-700">
+      <p className={styles.footerText}>
+        <Link href={routes.home} className={styles.link}>
           Back to home
         </Link>
       </p>
