@@ -1,9 +1,8 @@
-import { createServiceClient } from "@/lib/supabase-admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient, createServerClient } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const {
     data: { user },
     error: authError,
@@ -14,8 +13,8 @@ export async function POST() {
   }
 
   try {
-    const serviceClient = createServiceClient();
-    const { error } = await serviceClient.auth.admin.deleteUser(user.id);
+    const adminClient = createAdminClient();
+    const { error } = await adminClient.auth.admin.deleteUser(user.id);
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { routes } from "@/config/routes";
-import { createClient } from "@/lib/supabase/client";
+import { createClient as createBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils/cn";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,7 +32,7 @@ export function DeleteAccountButton({ className }: { className?: string }) {
       return;
     }
 
-    const supabase = createClient();
+    const supabase = createBrowserClient();
     await supabase.auth.signOut();
     router.replace(routes.signup);
     router.refresh();
