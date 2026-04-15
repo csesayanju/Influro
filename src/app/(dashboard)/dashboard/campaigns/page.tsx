@@ -78,7 +78,7 @@ export default async function CampaignsPage({ searchParams }: PageProps) {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Create campaign</h2>
           <p className={styles.sectionSub}>Add a campaign with budget, platform, and status.</p>
-          <CampaignForm action={createCampaignAction} submitLabel="Create campaign" formKey={formKey} />
+          <CampaignForm action={createCampaignAction} submitLabel="Create campaign" formKey={formKey} hiddenFields={{ brandId: brand.id }} />
         </section>
 
         {/* ── Active list ──────────────────────────────────────── */}
@@ -87,7 +87,7 @@ export default async function CampaignsPage({ searchParams }: PageProps) {
           {campaigns && campaigns.length > 0 ? (
             <div className={styles.list}>
               {campaigns.map((campaign) => (
-                <CampaignCard key={campaign.id} campaign={campaign} />
+                <CampaignCard key={campaign.id} campaign={campaign} brandId={brand.id} />
               ))}
             </div>
           ) : (
@@ -118,11 +118,13 @@ export default async function CampaignsPage({ searchParams }: PageProps) {
                   <div className={styles.rowActions}>
                     <form action={restoreCampaignAction}>
                       <input type="hidden" name="id" value={campaign.id} />
+                      <input type="hidden" name="brandId" value={brand.id} />
                       <button type="submit" className={styles.btnSmall}>Restore</button>
                     </form>
                     <form action={deleteCampaignAction}>
                       <input type="hidden" name="returnTo" value={routes.campaigns} />
                       <input type="hidden" name="id" value={campaign.id} />
+                      <input type="hidden" name="brandId" value={brand.id} />
                       <ConfirmSubmitButton
                         type="submit"
                         className={`${styles.btnSmall} ${styles.btnDanger}`}

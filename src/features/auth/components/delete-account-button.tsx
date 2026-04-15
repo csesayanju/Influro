@@ -35,7 +35,6 @@ export function DeleteAccountButton({ className }: { className?: string }) {
     const supabase = createBrowserClient();
     await supabase.auth.signOut();
     router.replace(routes.signup);
-    router.refresh();
   }
 
   return (

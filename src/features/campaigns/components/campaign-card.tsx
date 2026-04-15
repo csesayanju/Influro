@@ -22,7 +22,7 @@ function statusClass(status: string) {
   return styles.badge;
 }
 
-export function CampaignCard({ campaign }: { campaign: Campaign }) {
+export function CampaignCard({ campaign, brandId }: { campaign: Campaign; brandId: string }) {
   return (
     <article className={styles.campaignCard}>
       <div className={styles.campaignHead}>
@@ -42,6 +42,7 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
         <form action={setCampaignStatusAction}>
           <input type="hidden" name="returnTo" value={routes.campaigns} />
           <input type="hidden" name="id" value={campaign.id} />
+          <input type="hidden" name="brandId" value={brandId} />
           <select
             name="status"
             defaultValue={campaign.status}
@@ -58,6 +59,7 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
         <form action={archiveCampaignAction}>
           <input type="hidden" name="returnTo" value={routes.campaigns} />
           <input type="hidden" name="id" value={campaign.id} />
+          <input type="hidden" name="brandId" value={brandId} />
           <ConfirmSubmitButton
             type="submit"
             className={styles.btnSmall}

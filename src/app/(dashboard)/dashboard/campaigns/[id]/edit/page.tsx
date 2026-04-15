@@ -47,7 +47,7 @@ export default async function EditCampaignPage({ params }: EditCampaignPageProps
           <CampaignForm
             action={updateCampaignAction}
             submitLabel="Save changes"
-            hiddenFields={{ id: campaign.id, returnTo: editUrl }}
+            hiddenFields={{ id: campaign.id, returnTo: editUrl, brandId: brand.id }}
             defaultValues={{
               name:      campaign.name,
               slug:      campaign.slug,
@@ -62,6 +62,7 @@ export default async function EditCampaignPage({ params }: EditCampaignPageProps
           <form action={setCampaignStatusAction} className={styles.rowActions}>
             <input type="hidden" name="id" value={campaign.id} />
             <input type="hidden" name="returnTo" value={editUrl} />
+            <input type="hidden" name="brandId" value={brand.id} />
             <select
               name="status"
               defaultValue={campaign.status}
@@ -78,11 +79,13 @@ export default async function EditCampaignPage({ params }: EditCampaignPageProps
             <>
               <form action={restoreCampaignAction}>
                 <input type="hidden" name="id" value={campaign.id} />
+                <input type="hidden" name="brandId" value={brand.id} />
                 <button type="submit" className={styles.btnSmall}>Restore campaign</button>
               </form>
               <form action={deleteCampaignAction}>
                 <input type="hidden" name="returnTo" value={routes.campaigns} />
                 <input type="hidden" name="id" value={campaign.id} />
+                <input type="hidden" name="brandId" value={brand.id} />
                 <ConfirmSubmitButton
                   type="submit"
                   className={`${styles.btnSmall} ${styles.btnDanger}`}
@@ -96,6 +99,7 @@ export default async function EditCampaignPage({ params }: EditCampaignPageProps
             <form action={archiveCampaignAction}>
               <input type="hidden" name="returnTo" value={editUrl} />
               <input type="hidden" name="id" value={campaign.id} />
+              <input type="hidden" name="brandId" value={brand.id} />
               <ConfirmSubmitButton
                 type="submit"
                 className={styles.btnSmall}
