@@ -2,17 +2,18 @@ import { z } from "zod";
 
 export const campaignFormSchema = z
   .object({
-    name:      z.string().min(1, "Campaign name is required"),
-    slug:      z.string().optional(),
-    platform:  z.string().optional(),
-    startDate: z.string().optional().nullable(),
-    endDate:   z.string().optional().nullable(),
-    status:    z.enum(["draft", "active", "completed"]).default("draft"),
-    budget:    z.coerce
+    name:            z.string().min(1, "Campaign name is required"),
+    slug:            z.string().optional(),
+    platform:        z.string().optional(),
+    startDate:       z.string().optional().nullable(),
+    endDate:         z.string().optional().nullable(),
+    status:          z.enum(["draft", "active", "completed"]).default("draft"),
+    budget:          z.coerce
       .number()
       .int("Budget must be a whole number")
       .nonnegative("Budget must be a non-negative whole number")
       .default(0),
+    destination_url: z.string().optional().nullable().transform((v) => v?.trim() || null),
   })
   .refine(
     (d) => !d.startDate || !d.endDate || d.endDate >= d.startDate,
@@ -24,13 +25,14 @@ export type CampaignFormInput = z.infer<typeof campaignFormSchema>;
 /** Parse FormData through the schema. Returns `{ data }` or `{ error: string }`. */
 export function parseCampaignForm(formData: FormData): { data: CampaignFormInput } | { error: string } {
   const raw = {
-    name:      formData.get("name"),
-    slug:      formData.get("slug") || undefined,
-    platform:  formData.get("platform") || undefined,
-    startDate: formData.get("startDate") || null,
-    endDate:   formData.get("endDate") || null,
-    status:    formData.get("status") || "draft",
-    budget:    formData.get("budget"),
+    name:            formData.get("name"),
+    slug:            formData.get("slug") || undefined,
+    platform:        formData.get("platform") || undefined,
+    startDate:       formData.get("startDate") || null,
+    endDate:         formData.get("endDate") || null,
+    status:          formData.get("status") || "draft",
+    budget:          formData.get("budget"),
+    destination_url: formData.get("destination_url") || null,
   };
   const result = campaignFormSchema.safeParse(raw);
   if (!result.success) {
