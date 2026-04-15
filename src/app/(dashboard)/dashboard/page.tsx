@@ -63,6 +63,12 @@ export default async function DashboardPage() {
         <div className={styles.actions}>
           <SignOutButton className="border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.06)] text-slate-300 hover:bg-[rgba(255,255,255,0.12)]" />
           <Link
+            href={routes.campaigns}
+            className={styles.linkBtn}
+          >
+            Manage campaigns
+          </Link>
+          <Link
             href={routes.onboarding}
             className={styles.linkBtn}
           >
