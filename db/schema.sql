@@ -84,6 +84,7 @@ CREATE TABLE campaigns (
   end_date      DATE,
   platform      TEXT,
   status        TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'active', 'completed')),
+  archived_at   TIMESTAMPTZ DEFAULT NULL,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE(brand_id, slug)
@@ -91,6 +92,7 @@ CREATE TABLE campaigns (
 
 CREATE INDEX idx_campaigns_brand_id ON campaigns(brand_id);
 CREATE INDEX idx_campaigns_status ON campaigns(status);
+CREATE INDEX idx_campaigns_archived_at ON campaigns(archived_at) WHERE archived_at IS NOT NULL;
 
 CREATE TRIGGER set_campaigns_updated_at
   BEFORE UPDATE ON campaigns

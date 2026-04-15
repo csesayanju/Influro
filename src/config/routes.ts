@@ -8,6 +8,7 @@ export const routes = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   dashboard: "/dashboard",
+  campaigns: "/dashboard/campaigns",
   onboarding: "/onboarding",
   authCallback: "/auth/callback",
 } as const;
