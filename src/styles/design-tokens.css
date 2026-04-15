@@ -1,7 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap");
+/* Font loaded via next/font/google in layout.tsx — no @import needed.
+   The CSS variable --font-sora is injected on <html> at runtime. */
 
 :root {
-  --influro-font-family: "Sora", "Segoe UI", Roboto, Arial, sans-serif;
+  --influro-font-family: var(--font-sora), "Segoe UI", Roboto, Arial, sans-serif;
 
   --influro-cyan: #22d3ee;
   --influro-cyan-dim: #0891b2;

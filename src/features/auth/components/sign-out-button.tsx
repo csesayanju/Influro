@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { routes } from "@/config/routes";
-import { createClient } from "@/lib/supabase/client";
+import { createClient as createBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils/cn";
 import { useRouter } from "next/navigation";
 
@@ -14,10 +14,9 @@ export function SignOutButton({ className }: { className?: string }) {
       variant="outline"
       className={cn("font-medium", className)}
       onClick={async () => {
-        const supabase = createClient();
+        const supabase = createBrowserClient();
         await supabase.auth.signOut();
         router.push(routes.login);
-        router.refresh();
       }}
     >
       Sign out

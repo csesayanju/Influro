@@ -1,10 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
 /**
- * Service client — bypasses RLS. Use only in Server Components, Route Handlers,
- * middleware, or scripts. Requires SUPABASE_SECRET_KEY in env (never NEXT_PUBLIC_*).
+ * Admin client — bypasses RLS. Use only in Server Components, Route Handlers,
+ * middleware, or scripts. Requires SUPABASE_SECRET_KEY (never NEXT_PUBLIC_*).
  */
-export function createServiceClient() {
+export function createAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const secret = process.env.SUPABASE_SECRET_KEY;
   if (!url || !secret) {

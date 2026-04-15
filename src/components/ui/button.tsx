@@ -5,10 +5,11 @@ type Variant = "primary" | "outline" | "ghost";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-indigo-600 text-white shadow hover:bg-indigo-500 disabled:opacity-50",
+    "bg-[var(--influro-cyan)] text-[var(--influro-bg)] hover:opacity-90 disabled:opacity-50",
   outline:
-    "border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50",
-  ghost: "text-indigo-600 hover:text-indigo-500",
+    "border border-[rgba(255,255,255,0.14)] bg-[rgba(255,255,255,0.06)] text-[var(--influro-text-sub)] hover:bg-[rgba(255,255,255,0.1)] disabled:opacity-50",
+  ghost:
+    "text-[var(--influro-cyan)] hover:text-[var(--influro-text)] disabled:opacity-50",
 };
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
