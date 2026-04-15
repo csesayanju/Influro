@@ -24,7 +24,7 @@ export async function getCampaignById(id: string, brandId: string) {
   const supabase = createServerClient();
   return supabase
     .from("campaigns")
-    .select("id, name, slug, budget, status, platform, start_date, end_date, archived_at")
+    .select("id, name, slug, budget, status, platform, start_date, end_date, archived_at, destination_url")
     .eq("id", id)
     .eq("brand_id", brandId)
     .maybeSingle();

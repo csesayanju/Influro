@@ -1,5 +1,5 @@
 import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
-import { routes } from "@/config/routes";
+import { campaignDetailRoute, routes } from "@/config/routes";
 import Link from "next/link";
 import {
   archiveCampaignAction,
@@ -27,7 +27,9 @@ export function CampaignCard({ campaign, brandId }: { campaign: Campaign; brandI
     <article className={styles.campaignCard}>
       <div className={styles.campaignHead}>
         <div>
-          <p className={styles.campaignName}>{campaign.name}</p>
+          <Link href={campaignDetailRoute(campaign.id)} className={styles.campaignName} style={{ textDecoration: "none" }}>
+            {campaign.name}
+          </Link>
           <p className={styles.campaignMeta}>
             slug: {campaign.slug} · budget: INR {campaign.budget}
             {campaign.platform ? ` · ${campaign.platform}` : ""}

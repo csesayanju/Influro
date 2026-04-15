@@ -8,6 +8,7 @@ type CampaignDefaults = {
   platform?: string | null;
   startDate?: string | null;
   endDate?: string | null;
+  destination_url?: string | null;
 };
 
 type CampaignFormProps = {
@@ -117,6 +118,20 @@ export function CampaignForm({
           name="endDate"
           type="date"
           defaultValue={defaultValues.endDate ?? ""}
+          className={styles.input}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="destination_url" className={styles.fieldLabel}>
+          Destination URL
+        </label>
+        <input
+          id="destination_url"
+          name="destination_url"
+          type="url"
+          defaultValue={defaultValues.destination_url ?? ""}
+          placeholder="https://yourbrand.com/product"
           className={styles.input}
         />
       </div>

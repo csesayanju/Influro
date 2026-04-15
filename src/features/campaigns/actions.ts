@@ -44,7 +44,7 @@ export async function createCampaignAction(formData: FormData): Promise<void> {
   const parsed = parseCampaignForm(formData);
   if ("error" in parsed) redirect(`${routes.campaigns}?error=${encodeURIComponent(parsed.error)}`);
 
-  const { name, slug: slugInput, platform, startDate, endDate, status, budget } = parsed.data;
+  const { name, slug: slugInput, platform, startDate, endDate, status, budget, destination_url } = parsed.data;
   const slug = normalizeSlug(slugInput || name);
   if (!slug) redirect(`${routes.campaigns}?error=Slug+is+required`);
 
@@ -57,6 +57,7 @@ export async function createCampaignAction(formData: FormData): Promise<void> {
     start_date: startDate || null,
     end_date: endDate || null,
     status,
+    destination_url: destination_url || null,
   });
 
   if (error) {
@@ -83,13 +84,13 @@ export async function updateCampaignAction(formData: FormData): Promise<void> {
   const parsed = parseCampaignForm(formData);
   if ("error" in parsed) redirect(`${returnTo}?error=${encodeURIComponent(parsed.error)}`);
 
-  const { name, slug: slugInput, platform, startDate, endDate, status, budget } = parsed.data;
+  const { name, slug: slugInput, platform, startDate, endDate, status, budget, destination_url } = parsed.data;
   const slug = normalizeSlug(slugInput || name);
   if (!slug) redirect(`${returnTo}?error=Slug+is+required`);
 
   const { error, data } = await ctx.supabase
     .from("campaigns")
-    .update({ name, slug, budget, platform: platform || null, start_date: startDate || null, end_date: endDate || null, status })
+    .update({ name, slug, budget, platform: platform || null, start_date: startDate || null, end_date: endDate || null, status, destination_url: destination_url || null })
     .eq("id", id)
     .eq("brand_id", brandId)
     .select("id")

@@ -49,13 +49,14 @@ export default async function EditCampaignPage({ params }: EditCampaignPageProps
             submitLabel="Save changes"
             hiddenFields={{ id: campaign.id, returnTo: editUrl, brandId: brand.id }}
             defaultValues={{
-              name:      campaign.name,
-              slug:      campaign.slug,
-              budget:    campaign.budget,
-              status:    campaign.status,
-              platform:  campaign.platform,
-              startDate: campaign.start_date,
-              endDate:   campaign.end_date,
+              name:            campaign.name,
+              slug:            campaign.slug,
+              budget:          campaign.budget,
+              status:          campaign.status,
+              platform:        campaign.platform,
+              startDate:       campaign.start_date,
+              endDate:         campaign.end_date,
+              destination_url: campaign.destination_url,
             }}
           />
 
