@@ -31,6 +31,10 @@ import {
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+// Service role key is used only to verify the incoming JWT via getUser(token).
+// New Supabase projects use ES256 JWTs; the anon-key client can't verify them
+// locally, but the admin client delegates to the Auth server which always can.
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 /** Set this in the Supabase dashboard → Project Settings → Edge Functions → Secrets.
  *  Value: your deployed Next.js URL e.g. https://influro.app
@@ -87,19 +91,24 @@ Deno.serve(async (req) => {
     return json({ error: "Missing or malformed Authorization header" }, 401);
   }
 
-  // User-scoped client — RLS enforced automatically
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    global: { headers: { Authorization: authHeader } },
-  });
-
+  // Verify the JWT server-side via the admin client.
+  // This works with both HS256 and ES256 (new Supabase projects) because the
+  // request goes to the Auth server rather than being verified locally.
+  const token = authHeader.slice(7); // strip "Bearer "
+  const adminClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.getUser();
+  } = await adminClient.auth.getUser(token);
 
   if (authError || !user) {
     return json({ error: "Unauthorized" }, 401);
   }
+
+  // User-scoped client for all DB queries — RLS is enforced automatically.
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { headers: { Authorization: authHeader } },
+  });
 
   // ── Fetch campaign (RLS: must belong to user's brand) ────────────────────
   const { data: campaign, error: campaignError } = await supabase
