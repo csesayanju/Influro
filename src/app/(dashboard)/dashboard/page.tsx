@@ -1,7 +1,6 @@
 import { DeleteAccountButton } from "@/features/auth/components/delete-account-button";
 import { SignOutButton } from "@/features/auth/components/sign-out-button";
 import { ensureBrandProfile } from "@/features/brands/actions";
-import { getBrandByUserId } from "@/features/brands/queries";
 import { routes } from "@/config/routes";
 import { createServerClient } from "@/lib/supabase";
 import Link from "next/link";
@@ -13,7 +12,9 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect(routes.login);
 
-  const ensured = await ensureBrandProfile();
+  // ensureBrandProfile(user) reuses the user we already have — no extra
+  // getUser() round-trip. It also returns the brand, so no getBrandByUserId().
+  const ensured = await ensureBrandProfile(user);
   if ("error" in ensured) {
     return (
       <main className={styles.page}>
@@ -27,8 +28,8 @@ export default async function DashboardPage() {
     );
   }
 
-  const { data: brand } = await getBrandByUserId(user.id);
-  if (brand && !brand.category) redirect(routes.onboarding);
+  const { brand } = ensured;
+  if (!brand.category) redirect(routes.onboarding);
 
   return (
     <main className={styles.page}>
@@ -37,12 +38,10 @@ export default async function DashboardPage() {
         <p className={styles.text}>
           Signed in as <span className={styles.textStrong}>{user.email}</span>
         </p>
-        {brand ? (
-          <p className={styles.text}>
-            Brand: <span className={styles.textStrong}>{brand.name}</span>
-            {brand.plan ? <span> · Plan: {brand.plan}</span> : null}
-          </p>
-        ) : null}
+        <p className={styles.text}>
+          Brand: <span className={styles.textStrong}>{brand.name}</span>
+          {brand.plan ? <span> · Plan: {brand.plan}</span> : null}
+        </p>
         <div className={styles.actions}>
           <SignOutButton />
           <Link href={routes.campaigns} className={styles.linkBtn}>Manage campaigns</Link>

@@ -38,9 +38,13 @@ export async function middleware(request: NextRequest) {
     },
   });
 
+  // getSession() reads from the cookie — no network call (~0 ms vs ~300 ms).
+  // Pages use getUser() for secure server-side data fetching; middleware only
+  // needs to know "is there a session?" for routing decisions.
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
 
   const path = request.nextUrl.pathname;
 
