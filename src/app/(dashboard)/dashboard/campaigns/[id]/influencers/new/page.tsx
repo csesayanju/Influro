@@ -1,7 +1,7 @@
 import { InfluencerForm } from "@/features/influencers/components/influencer-form";
 import { createInfluencerAction } from "@/features/influencers/actions";
 import { getCampaignById } from "@/features/campaigns/queries";
-import { getBrandByUserId } from "@/features/brands/queries";
+import { ensureBrandProfile } from "@/features/brands/actions";
 import { campaignDetailRoute, routes } from "@/config/routes";
 import { createServerClient } from "@/lib/supabase";
 import Link from "next/link";
@@ -17,8 +17,9 @@ export default async function NewInfluencerPage({ params }: PageProps) {
   } = await supabase.auth.getUser();
   if (!user) redirect(routes.login);
 
-  const { data: brand } = await getBrandByUserId(user.id);
-  if (!brand) redirect(routes.dashboard);
+  const ensured = await ensureBrandProfile(user);
+  if ("error" in ensured) redirect(routes.dashboard);
+  const { brand } = ensured;
 
   const { data: campaign } = await getCampaignById(params.id, brand.id);
   if (!campaign) notFound();

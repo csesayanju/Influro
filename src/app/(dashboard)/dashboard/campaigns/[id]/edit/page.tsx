@@ -8,7 +8,7 @@ import {
 } from "@/features/campaigns/actions";
 import { CampaignForm } from "@/features/campaigns/components/campaign-form";
 import { getCampaignById } from "@/features/campaigns/queries";
-import { getBrandByUserId } from "@/features/brands/queries";
+import { ensureBrandProfile } from "@/features/brands/actions";
 import { routes } from "@/config/routes";
 import { createServerClient } from "@/lib/supabase";
 import Link from "next/link";
@@ -24,8 +24,9 @@ export default async function EditCampaignPage({ params }: EditCampaignPageProps
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect(routes.login);
 
-  const { data: brand } = await getBrandByUserId(user.id);
-  if (!brand) redirect(routes.dashboard);
+  const ensured = await ensureBrandProfile(user);
+  if ("error" in ensured) redirect(routes.dashboard);
+  const { brand } = ensured;
 
   const { data: campaign } = await getCampaignById(params.id, brand.id);
   if (!campaign) notFound();

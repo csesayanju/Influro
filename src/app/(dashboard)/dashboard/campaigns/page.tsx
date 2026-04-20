@@ -9,7 +9,6 @@ import { CampaignCard } from "@/features/campaigns/components/campaign-card";
 import { CampaignForm } from "@/features/campaigns/components/campaign-form";
 import { getActiveCampaigns, getArchivedCampaigns } from "@/features/campaigns/queries";
 import { ensureBrandProfile } from "@/features/brands/actions";
-import { getBrandByUserId } from "@/features/brands/queries";
 import { routes } from "@/config/routes";
 import { createServerClient } from "@/lib/supabase";
 import Link from "next/link";
@@ -29,7 +28,7 @@ export default async function CampaignsPage({ searchParams }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect(routes.login);
 
-  const ensured = await ensureBrandProfile();
+  const ensured = await ensureBrandProfile(user);
   if ("error" in ensured) {
     return (
       <main className={styles.page}>
@@ -40,8 +39,7 @@ export default async function CampaignsPage({ searchParams }: PageProps) {
     );
   }
 
-  const { data: brand } = await getBrandByUserId(user.id);
-  if (!brand) redirect(routes.dashboard);
+  const { brand } = ensured;
 
   const [{ data: campaigns }, { data: archivedCampaigns }] = await Promise.all([
     getActiveCampaigns(brand.id),
