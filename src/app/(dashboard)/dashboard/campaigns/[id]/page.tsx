@@ -1,9 +1,13 @@
 import { InfluencerRow } from "@/features/influencers/components/influencer-row";
 import { getInfluencersByCampaign } from "@/features/influencers/queries";
-import { getCampaignById } from "@/features/campaigns/queries";
+import {
+  getCampaignById,
+  getExistingInfluencerIdsWithLinks,
+} from "@/features/campaigns/queries";
 import { ensureBrandProfile } from "@/features/brands/actions";
 import { campaignDetailRoute, newInfluencerRoute, routes } from "@/config/routes";
 import { createServerClient } from "@/lib/supabase";
+import { buildTrackingUrl } from "@/lib/utm-builder";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import styles from "../../dashboard-theme.module.css";
@@ -38,6 +42,10 @@ export default async function CampaignDetailPage({
     campaign.id,
     brand.id
   );
+
+  const hasLinkIds = await getExistingInfluencerIdsWithLinks(campaign.id);
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "https://influro.vercel.app";
 
   const flash = one(searchParams?.added)
     ? "Influencer added."
@@ -168,14 +176,24 @@ export default async function CampaignDetailPage({
                 </tr>
               </thead>
               <tbody>
-                {influencers.map((inf) => (
-                  <InfluencerRow
-                    key={inf.id}
-                    influencer={inf as Parameters<typeof InfluencerRow>[0]["influencer"]}
-                    campaignId={campaign.id}
-                    brandId={brand.id}
-                  />
-                ))}
+                {influencers.map((inf) => {
+                  const existingTrackingUrl = hasLinkIds.has(inf.id)
+                    ? buildTrackingUrl({
+                        appUrl,
+                        campaignSlug: campaign.slug,
+                        influencerId: inf.id,
+                      })
+                    : null;
+                  return (
+                    <InfluencerRow
+                      key={inf.id}
+                      influencer={inf as Parameters<typeof InfluencerRow>[0]["influencer"]}
+                      campaignId={campaign.id}
+                      brandId={brand.id}
+                      existingTrackingUrl={existingTrackingUrl}
+                    />
+                  );
+                })}
               </tbody>
             </table>
           ) : (
