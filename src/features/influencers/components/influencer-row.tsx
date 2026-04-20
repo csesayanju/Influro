@@ -25,10 +25,12 @@ export function InfluencerRow({
   influencer,
   campaignId,
   brandId,
+  existingTrackingUrl,
 }: {
   influencer: InfluencerWithClicks;
   campaignId: string;
   brandId: string;
+  existingTrackingUrl?: string | null;
 }) {
   const clicks = influencer.utm_links?.[0]?.click_count ?? 0;
 
@@ -51,6 +53,7 @@ export function InfluencerRow({
         <GenerateLinkButton
           campaignId={campaignId}
           influencerId={influencer.id}
+          existingTrackingUrl={existingTrackingUrl}
         />
       </td>
       <td className={styles.tableCell}>

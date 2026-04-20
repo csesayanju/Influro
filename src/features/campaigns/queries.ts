@@ -29,3 +29,22 @@ export async function getCampaignById(id: string, brandId: string) {
     .eq("brand_id", brandId)
     .maybeSingle();
 }
+
+/**
+ * Returns the set of influencer IDs that already have a UTM link row
+ * for this campaign. Used to pre-populate the "copy" state in
+ * GenerateLinkButton on server-render so a page refresh doesn't reset
+ * the UI to "Generate link".
+ */
+export async function getExistingInfluencerIdsWithLinks(
+  campaignId: string
+): Promise<Set<string>> {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from("utm_links")
+    .select("influencer_id")
+    .eq("campaign_id", campaignId);
+
+  if (error || !data) return new Set<string>();
+  return new Set(data.map((r) => r.influencer_id as string));
+}
