@@ -2,6 +2,7 @@ import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
 import { editInfluencerRoute } from "@/config/routes";
 import Link from "next/link";
 import { deleteInfluencerAction } from "../actions";
+import { GenerateLinkButton } from "@/features/campaigns/components/generate-link-button";
 import styles from "@/app/(dashboard)/dashboard/dashboard-theme.module.css";
 
 export type InfluencerWithClicks = {
@@ -46,6 +47,12 @@ export function InfluencerRow({
         ₹{influencer.agreed_fee.toLocaleString("en-IN")}
       </td>
       <td className={`${styles.tableCell} ${styles.numCell}`}>{clicks}</td>
+      <td className={styles.tableCell}>
+        <GenerateLinkButton
+          campaignId={campaignId}
+          influencerId={influencer.id}
+        />
+      </td>
       <td className={styles.tableCell}>
         <div className={styles.rowActions}>
           <Link
