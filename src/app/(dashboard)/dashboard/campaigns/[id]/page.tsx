@@ -163,6 +163,7 @@ export default async function CampaignDetailPage({
                   <th className="numCol">Followers</th>
                   <th className="numCol">Agreed fee</th>
                   <th className="numCol">Clicks</th>
+                  <th>Tracking</th>
                   <th>Actions</th>
                 </tr>
               </thead>
