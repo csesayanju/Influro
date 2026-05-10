@@ -38,7 +38,6 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  try {
   const slug = params.slug?.trim();
   const influencerId = req.nextUrl.searchParams.get("c")?.trim() ?? "";
   const homeUrl = new URL("/", req.url);
@@ -100,9 +99,4 @@ export async function GET(
     });
   }
   return res;
-  } catch (err) {
-    // DEBUG: temporary — return the error so we can diagnose the 500
-    const msg = err instanceof Error ? err.message + "\n" + (err.stack ?? "") : String(err);
-    return new NextResponse("DEBUG 500:\n" + msg, { status: 200, headers: { "content-type": "text/plain" } });
-  }
 }
