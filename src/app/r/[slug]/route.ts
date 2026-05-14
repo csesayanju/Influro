@@ -38,6 +38,22 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { slug: string } }
 ) {
+  // TEMP DIAG: list which Supabase-related env vars Vercel actually sees.
+  // Returns 200 with a plain-text dump so we can read it via curl.
+  if (req.nextUrl.searchParams.get("diag") === "1") {
+    const keys = Object.keys(process.env)
+      .filter((k) => /SUPABASE|VERCEL_ENV|NODE_ENV|IP_HASH/i.test(k))
+      .sort();
+    const dump = keys
+      .map((k) => `${k}=${(process.env[k] ?? "").slice(0, 12)}…`)
+      .join("\n");
+    return new NextResponse(`ENV KEYS:\n${dump}\n`, {
+      status: 200,
+      headers: { "content-type": "text/plain" },
+    });
+  }
+
+  try {
   const slug = params.slug?.trim();
   const influencerId = req.nextUrl.searchParams.get("c")?.trim() ?? "";
   const homeUrl = new URL("/", req.url);
@@ -99,4 +115,12 @@ export async function GET(
     });
   }
   return res;
+  } catch (err) {
+    // TEMP DIAG: return the error in the response body so curl can see it.
+    const msg = err instanceof Error ? err.message + "\n" + (err.stack ?? "") : String(err);
+    return new NextResponse("DIAG ERROR:\n" + msg, {
+      status: 200,
+      headers: { "content-type": "text/plain" },
+    });
+  }
 }
