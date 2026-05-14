@@ -3,8 +3,22 @@ import { z } from "zod";
 export const PLATFORMS = ["Instagram", "YouTube", "Twitter/X"] as const;
 export type Platform = (typeof PLATFORMS)[number];
 
+/**
+ * Normalize a raw handle string from the form:
+ *   - Trim surrounding whitespace
+ *   - Strip leading `@` (the form placeholder is "e.g. @username", so users
+ *     naturally type it). Storage is canonical without `@`; the display
+ *     layer renders `@{handle}` so we don't get `@@username`.
+ */
+function normalizeHandle(raw: string): string {
+  return raw.trim().replace(/^@+/, "");
+}
+
 export const influencerFormSchema = z.object({
-  handle: z.string().min(1, "Handle is required"),
+  handle: z
+    .string()
+    .transform(normalizeHandle)
+    .refine((s) => s.length > 0, "Handle is required"),
   platform: z
     .string()
     .refine(

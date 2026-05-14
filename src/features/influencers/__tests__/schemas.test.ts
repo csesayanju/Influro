@@ -93,4 +93,61 @@ describe("parseInfluencerForm", () => {
       expect("data" in result).toBe(true);
     }
   });
+
+  // ── TECH-46: normalize handles so we never display @@username ────────────────
+  describe("handle normalization (TECH-46)", () => {
+    it("strips a leading @ from the handle", () => {
+      const result = parseInfluencerForm(
+        makeForm({ ...valid, handle: "@priya.glam" })
+      );
+      expect("data" in result && result.data.handle).toBe("priya.glam");
+    });
+
+    it("strips multiple leading @ chars", () => {
+      const result = parseInfluencerForm(
+        makeForm({ ...valid, handle: "@@@priya.glam" })
+      );
+      expect("data" in result && result.data.handle).toBe("priya.glam");
+    });
+
+    it("trims surrounding whitespace", () => {
+      const result = parseInfluencerForm(
+        makeForm({ ...valid, handle: "  priya.glam  " })
+      );
+      expect("data" in result && result.data.handle).toBe("priya.glam");
+    });
+
+    it("trims whitespace AND strips leading @ together", () => {
+      const result = parseInfluencerForm(
+        makeForm({ ...valid, handle: "  @priya.glam  " })
+      );
+      expect("data" in result && result.data.handle).toBe("priya.glam");
+    });
+
+    it("leaves a handle without @ untouched", () => {
+      const result = parseInfluencerForm(
+        makeForm({ ...valid, handle: "priya.glam" })
+      );
+      expect("data" in result && result.data.handle).toBe("priya.glam");
+    });
+
+    it("keeps an inner @ (only the leading one is stripped)", () => {
+      const result = parseInfluencerForm(
+        makeForm({ ...valid, handle: "user@domain" })
+      );
+      expect("data" in result && result.data.handle).toBe("user@domain");
+    });
+
+    it("rejects a handle that is only @ chars", () => {
+      const result = parseInfluencerForm(makeForm({ ...valid, handle: "@@@" }));
+      expect(result).toMatchObject({ error: "Handle is required" });
+    });
+
+    it("rejects a handle that is only whitespace and @", () => {
+      const result = parseInfluencerForm(
+        makeForm({ ...valid, handle: "  @  " })
+      );
+      expect(result).toMatchObject({ error: "Handle is required" });
+    });
+  });
 });
