@@ -52,12 +52,16 @@ function LoginForm() {
           ? normalizeLoginError(error.message)
           : "Could not sign in. Please try again.";
     }
-    setLoading(false);
     if (errorMessage) {
+      setLoading(false);
       setMessage(errorMessage);
       return;
     }
-    router.push(next);
+    // Hard navigation so the new auth cookies are sent on the next request and
+    // middleware re-runs against the destination. router.push() does a soft
+    // RSC nav that can serve a stale "logged-out" payload for /dashboard,
+    // which manifests as "login didn't redirect".
+    window.location.assign(next);
   }
 
   return (
