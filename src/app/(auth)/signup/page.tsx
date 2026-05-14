@@ -57,9 +57,10 @@ export default function SignupPage() {
       setMessage(
         "Check your email for a confirmation link (if required), or you may already be signed in."
       );
-      router.refresh();
       if (data.session) {
-        router.push(routes.dashboard);
+        // Hard nav so middleware sees the new auth cookies and routes the
+        // brand-new user to /onboarding when they have no brand row yet.
+        window.location.assign(routes.dashboard);
       }
     } catch (error) {
       setMessage(

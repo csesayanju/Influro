@@ -3,7 +3,8 @@
  *
  * What we're verifying:
  *  - Clicking the button calls supabase.auth.signOut() exactly once
- *  - After signOut resolves, the user is redirected to /login
+ *  - signOut is called with `scope: "local"` (fast path — no /logout round-trip)
+ *  - After signOut resolves, the user is hard-navigated to /login
  *  - Button text is visible and accessible
  */
 import { render, screen, waitFor } from "@testing-library/react";
@@ -11,11 +12,12 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SignOutButton } from "../sign-out-button";
 
-// ── router mock ───────────────────────────────────────────────────────────────
-const mockPush = vi.fn();
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
-}));
+// ── window.location.assign mock ───────────────────────────────────────────────
+const mockAssign = vi.fn();
+Object.defineProperty(window, "location", {
+  writable: true,
+  value: { ...window.location, assign: mockAssign },
+});
 
 // ── supabase client mock ──────────────────────────────────────────────────────
 const mockSignOut = vi.fn().mockResolvedValue({ error: null });
@@ -35,18 +37,19 @@ describe("SignOutButton — network", () => {
     expect(screen.getByRole("button", { name: /sign out/i })).toBeInTheDocument();
   });
 
-  it("calls supabase.auth.signOut() once on click", async () => {
+  it("calls supabase.auth.signOut() once with scope: 'local' on click", async () => {
     render(<SignOutButton />);
     await userEvent.click(screen.getByRole("button", { name: /sign out/i }));
 
     await waitFor(() => expect(mockSignOut).toHaveBeenCalledTimes(1));
+    expect(mockSignOut).toHaveBeenCalledWith({ scope: "local" });
   });
 
-  it("redirects to /login after sign-out", async () => {
+  it("hard-navigates to /login after sign-out", async () => {
     render(<SignOutButton />);
     await userEvent.click(screen.getByRole("button", { name: /sign out/i }));
 
-    await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/login"));
+    await waitFor(() => expect(mockAssign).toHaveBeenCalledWith("/login"));
   });
 
   it("redirects only after signOut resolves, not before", async () => {
@@ -61,9 +64,9 @@ describe("SignOutButton — network", () => {
     await userEvent.click(screen.getByRole("button", { name: /sign out/i }));
 
     // signOut still pending — no redirect yet
-    expect(mockPush).not.toHaveBeenCalled();
+    expect(mockAssign).not.toHaveBeenCalled();
 
     resolveSignOut();
-    await waitFor(() => expect(mockPush).toHaveBeenCalledWith("/login"));
+    await waitFor(() => expect(mockAssign).toHaveBeenCalledWith("/login"));
   });
 });
